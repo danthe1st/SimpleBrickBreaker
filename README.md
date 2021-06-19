@@ -1,6 +1,8 @@
 # SimpleBrickBreaker
 > a simple brick breaker game made with Java and LibGdX
 
+## The game
+
 ### Goal
 Destroy all bricks using the bullet
 
@@ -16,3 +18,6 @@ Destroy all bricks using the bullet
 * `P` pauses the game
 * `R` resets the game
 * `ESC` exits the game
+
+## Running
+You can run the game by downloading this repository and executing `./gradlew run`.
