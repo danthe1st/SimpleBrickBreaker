@@ -164,18 +164,6 @@ public class BrickBreaker extends ApplicationAdapter {
                 startTime=System.currentTimeMillis()-startTime;
             }
         }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            for(int y = HEIGHT - 1; y >= 0; y--) {
-                for(int x = 0; x < WIDTH; x++) {
-                    if(elementsInGameField[x][y] == null) {
-                        System.out.print(" ");
-                    } else {
-                        System.out.print(elementsInGameField[x][y].getDurability());
-                    }
-                }
-                System.out.println();
-            }
-        }
         if(Gdx.input.isKeyPressed(Input.Keys.R)) {
             reset();
         }
