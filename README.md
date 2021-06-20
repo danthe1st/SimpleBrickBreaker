@@ -21,6 +21,6 @@ Destroy all bricks using the bullet
 * `ESC` exits the game
 
 ## Running
-You can run the game by downloading this repository and executing `./gradlew run`.
+You can run the game by downloading this repository and executing `./gradlew run` (or `gradlew run` if youn use `cmd`).
 
-You can start the application without full-screen using the JVM argument `-Debug`
+You can start the application without full-screen using the JVM argument `-Debug`.

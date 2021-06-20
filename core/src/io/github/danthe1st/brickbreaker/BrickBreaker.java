@@ -215,8 +215,6 @@ public class BrickBreaker extends ApplicationAdapter {
             shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
-
-
     }
 
     private void drawBullet() {
