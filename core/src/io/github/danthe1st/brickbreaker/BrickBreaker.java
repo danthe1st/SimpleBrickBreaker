@@ -3,9 +3,7 @@ package io.github.danthe1st.brickbreaker;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -35,7 +33,7 @@ public class BrickBreaker extends ApplicationAdapter {
     private float playerPos;
     private Bullet bullet;
 
-    private Set <Brick> bricks = new HashSet <>();
+    private final Set <Brick> bricks = new HashSet <>();
     private Brick[][] elementsInGameField;
 
     private boolean playing = true;
@@ -57,7 +55,7 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     private void reset() {
-        playerPos = WIDTH / 2 - 1 + 0.01f;
+        playerPos = (float)WIDTH / 2 - 1 + 0.01f;
         resetBullet();
         bricks.clear();
         elementsInGameField = new Brick[WIDTH][HEIGHT];
@@ -71,7 +69,7 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     private void resetBullet() {
-        bullet = new Bullet(playerPos + PLAYER_WIDTH / 2, PLAYER_POSITION_Y + PLAYER_HEIGHT);
+        bullet = new Bullet(playerPos + (float)PLAYER_WIDTH / 2, PLAYER_POSITION_Y + PLAYER_HEIGHT);
     }
 
     private void addBrick(Brick brick) {
@@ -123,7 +121,7 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     public float getBaseSpeed() {
-        return 2 * (1 + ((System.currentTimeMillis() - startTime)) / (float) 120_000);//2min-->double speed, 4min-->3x speec, etc
+        return 2 * (1 + System.currentTimeMillis() - startTime / (float) 120_000);//2min-->double speed, 4min-->3x speed, etc
     }
 
     @Override
@@ -140,7 +138,7 @@ public class BrickBreaker extends ApplicationAdapter {
         ScreenUtils.clear(1, 1, 1, 1);
         if(playing) {
             loop();
-        }//TODO else pause info
+        }
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         shapeRenderer.setProjectionMatrix(cam.combined);
@@ -158,11 +156,7 @@ public class BrickBreaker extends ApplicationAdapter {
     private void checkImportantKeys() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             playing = !playing;
-            if(playing){
-                startTime=System.currentTimeMillis()-startTime;
-            }else{
-                startTime=System.currentTimeMillis()-startTime;
-            }
+            startTime=System.currentTimeMillis()-startTime;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.R)) {
             reset();
@@ -179,7 +173,7 @@ public class BrickBreaker extends ApplicationAdapter {
             moveBulletIfNotYetShot();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            playerPos = Math.min(playerPos + 10 * Gdx.graphics.getDeltaTime(), WIDTH - PLAYER_WIDTH);
+            playerPos = Math.min(playerPos + 10 * Gdx.graphics.getDeltaTime(), (float)WIDTH - PLAYER_WIDTH);
             moveBulletIfNotYetShot();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -195,7 +189,7 @@ public class BrickBreaker extends ApplicationAdapter {
 
     private void moveBulletIfNotYetShot() {
         if(!bullet.isActive()) {
-            bullet.setX(playerPos + PLAYER_WIDTH / 2);
+            bullet.setX(playerPos + (float)PLAYER_WIDTH / 2);
         }
     }
 
@@ -210,8 +204,19 @@ public class BrickBreaker extends ApplicationAdapter {
         drawBullet();
         drawPlayer();
 
-        shapeRenderer.end();
         batch.end();
+        shapeRenderer.end();
+        if(!playing){
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0.75f,0.75f,0.75f,0.5f);
+            shapeRenderer.rect(0,0,WIDTH,HEIGHT);
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
+
+
     }
 
     private void drawBullet() {
