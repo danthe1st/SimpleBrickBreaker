@@ -107,9 +107,27 @@ public class Bullet {
                 y += yDistance;
                 xDistance = 0;
                 yDistance = 0;
+                if(x<0){
+                    x=0;
+                    xSpeed=Math.abs(xSpeed);
+                }
+                if(x>game.getFieldWidth()){
+                    x=game.getFieldWidth();
+                    xSpeed=-Math.abs(xSpeed);
+                }
+                if(y<0){
+                    y=0;
+                    ySpeed=Math.abs(ySpeed);
+                }
+                if(y>game.getFieldHeight()){
+                    y=game.getFieldHeight();
+                    ySpeed=-Math.abs(ySpeed);
+                }
             }
         } while(!(isZero(xDistance) && isZero(yDistance)));
     }
+
+
 
     private static boolean intersectsRectangleLine(Vector2 lineStart, Vector2 lineEnd, Rectangle rect, Vector2 intersection) {
         //kinda imitates Intersector.intersectSegmentRectangle
@@ -123,6 +141,7 @@ public class Bullet {
                 Intersector.intersectSegments(lineStart, lineEnd, a, c, intersection) ||
                 Intersector.intersectSegments(lineStart, lineEnd, b, d, intersection);
     }
+    
     private boolean isZero(float toTest) {
         return toTest > -0.001 && toTest < 0.001;
     }

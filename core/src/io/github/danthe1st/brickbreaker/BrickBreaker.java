@@ -200,8 +200,6 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     private void drawAll() {
-
-
         batch.begin();
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -209,8 +207,8 @@ public class BrickBreaker extends ApplicationAdapter {
             drawBrick(brick);
         }
 
-        drawPlayer();
         drawBullet();
+        drawPlayer();
 
         shapeRenderer.end();
         batch.end();
@@ -218,7 +216,8 @@ public class BrickBreaker extends ApplicationAdapter {
 
     private void drawBullet() {
         shapeRenderer.setColor(Color.GRAY);
-        shapeRenderer.circle(bullet.getX(), bullet.getY(), 0.2f);
+
+        shapeRenderer.circle(bullet.getX(), bullet.getY(), 0.2f,20);
     }
 
     private void drawBrick(Brick brick) {

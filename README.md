@@ -11,6 +11,7 @@ Destroy all bricks using the bullet
 * a live is lost if the bullet reaches the bottom of the screen
 * The bullet can be shot to the top at the start of the game or if it is lost on the bottom of the screen.
 * The player has 3 lives
+* The game gets faster the longer you play
 
 ### Keys
 * Left and right arrow keys are used in order to control the platform
@@ -21,3 +22,5 @@ Destroy all bricks using the bullet
 
 ## Running
 You can run the game by downloading this repository and executing `./gradlew run`.
+
+You can start the application without full-screen using the JVM argument `-Debug`
