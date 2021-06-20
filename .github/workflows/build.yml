@@ -16,7 +16,7 @@ jobs:
       - name: Create executable JAR
         run: ./gradlew desktop:dist
       - name: Upload JAR
-        uses: actions/upload-artifact
+        uses: actions/upload-artifact@v2
         with:
           name: Runnable JAR
           path: desktop/build/libs/*.jar
