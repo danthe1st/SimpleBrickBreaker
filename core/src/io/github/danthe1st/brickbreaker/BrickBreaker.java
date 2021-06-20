@@ -55,7 +55,7 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     private void reset() {
-        playerPos = (float)WIDTH / 2 - 1 + 0.01f;
+        playerPos = (float) WIDTH / 2 - 1 + 0.01f;
         resetBullet();
         bricks.clear();
         elementsInGameField = new Brick[WIDTH][HEIGHT];
@@ -65,11 +65,11 @@ public class BrickBreaker extends ApplicationAdapter {
             }
         }
         lives = 3;
-        startTime=0;
+        startTime = 0;
     }
 
     private void resetBullet() {
-        bullet = new Bullet(playerPos + (float)PLAYER_WIDTH / 2, PLAYER_POSITION_Y + PLAYER_HEIGHT);
+        bullet = new Bullet(playerPos + (float) PLAYER_WIDTH / 2, PLAYER_POSITION_Y + PLAYER_HEIGHT);
     }
 
     private void addBrick(Brick brick) {
@@ -98,7 +98,7 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     public Brick getBrick(int x, int y) {
-        if(isOutOfBounds(x,y)){
+        if(isOutOfBounds(x, y)) {
             return null;
         }
         return elementsInGameField[x][y];
@@ -121,16 +121,16 @@ public class BrickBreaker extends ApplicationAdapter {
     }
 
     public float getBaseSpeed() {
-        return 2 * (1 + System.currentTimeMillis() - startTime / (float) 120_000);//2min-->double speed, 4min-->3x speed, etc
+        return 2 * (1 + (System.currentTimeMillis() - startTime) / (float) 120_000);//2min-->double speed, 4min-->3x speed, etc
     }
 
     @Override
     public void render() {
         checkImportantKeys();
-        if(lives<1){
+        if(lives < 1) {
             justDrawScreen(gameOverImage);
             return;
-        }else if(bricks.isEmpty()){
+        } else if(bricks.isEmpty()) {
             justDrawScreen(winImage);
             return;
         }
@@ -138,6 +138,7 @@ public class BrickBreaker extends ApplicationAdapter {
         ScreenUtils.clear(1, 1, 1, 1);
         if(playing) {
             loop();
+
         }
         cam.update();
         batch.setProjectionMatrix(cam.combined);
@@ -146,17 +147,17 @@ public class BrickBreaker extends ApplicationAdapter {
         drawAll();
     }
 
-    private void justDrawScreen(Texture texture){
+    private void justDrawScreen(Texture texture) {
         ScreenUtils.clear(1, 1, 1, 1);
         batch.begin();
-        batch.draw(texture,0,0,WIDTH,HEIGHT);
+        batch.draw(texture, 0, 0, WIDTH, HEIGHT);
         batch.end();
     }
 
     private void checkImportantKeys() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             playing = !playing;
-            startTime=System.currentTimeMillis()-startTime;
+            startTime = System.currentTimeMillis() - startTime;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.R)) {
             reset();
@@ -173,7 +174,7 @@ public class BrickBreaker extends ApplicationAdapter {
             moveBulletIfNotYetShot();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            playerPos = Math.min(playerPos + 10 * Gdx.graphics.getDeltaTime(), (float)WIDTH - PLAYER_WIDTH);
+            playerPos = Math.min(playerPos + 10 * Gdx.graphics.getDeltaTime(), (float) WIDTH - PLAYER_WIDTH);
             moveBulletIfNotYetShot();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -189,43 +190,62 @@ public class BrickBreaker extends ApplicationAdapter {
 
     private void moveBulletIfNotYetShot() {
         if(!bullet.isActive()) {
-            bullet.setX(playerPos + (float)PLAYER_WIDTH / 2);
+            bullet.setX(playerPos + (float) PLAYER_WIDTH / 2);
         }
     }
 
     private void drawAll() {
-        batch.begin();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        for(Brick brick : bricks) {
-            drawBrick(brick);
-        }
-
-        drawBullet();
-        drawPlayer();
-
-        batch.end();
-        shapeRenderer.end();
-        if(!playing){
+        drawShapes();
+        drawTextures();
+        if(!playing) {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0.75f,0.75f,0.75f,0.5f);
-            shapeRenderer.rect(0,0,WIDTH,HEIGHT);
+            shapeRenderer.setColor(0.75f, 0.75f, 0.75f, 0.5f);
+            shapeRenderer.rect(0, 0, WIDTH, HEIGHT);
             shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
     }
 
-    private void drawBullet() {
-        shapeRenderer.setColor(Color.GRAY);
-
-        shapeRenderer.circle(bullet.getX(), bullet.getY(), 0.2f,20);
+    private void drawShapes() {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        drawBrickShapes();
+        drawBullet();
+        drawPlayer();
+        shapeRenderer.end();
     }
 
-    private void drawBrick(Brick brick) {
+    private void drawTextures() {
+        batch.begin();
+        drawBrickTextures();
+        batch.end();
+    }
+
+    private void drawBullet() {
+        shapeRenderer.setColor(Color.GRAY);
+        shapeRenderer.circle(bullet.getX(), bullet.getY(), 0.2f, 20);
+    }
+
+    private void drawBrickShapes() {
+        for(Brick brick : bricks) {
+            drawBrickShape(brick);
+        }
+    }
+
+    private void drawBrickShape(Brick brick) {
         shapeRenderer.setColor(brick.getColour());
         shapeRenderer.rect(brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
+    }
+
+    private void drawBrickTextures() {
+        for(Brick brick : bricks) {
+            drawBrickTexture(brick);
+        }
+    }
+
+    private void drawBrickTexture(Brick brick) {
         batch.draw(brickImg, brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
     }
 
@@ -247,14 +267,14 @@ public class BrickBreaker extends ApplicationAdapter {
     public void bulletLost() {
         lives--;
         resetBullet();
-        startTime-=System.currentTimeMillis();
+        startTime -= System.currentTimeMillis();
     }
 
     public float getFieldWidth() {
         return WIDTH;
     }
 
-    public float getFieldHeight(){
+    public float getFieldHeight() {
         return HEIGHT;
     }
 }

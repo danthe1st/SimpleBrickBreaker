@@ -141,8 +141,20 @@ public class Bullet {
                 Intersector.intersectSegments(lineStart, lineEnd, a, c, intersection) ||
                 Intersector.intersectSegments(lineStart, lineEnd, b, d, intersection);
     }
-    
+
     private boolean isZero(float toTest) {
         return toTest > -0.001 && toTest < 0.001;
+    }
+
+    @Override
+    public String toString() {
+        return "Bullet{" +
+                "HEIGHT=" + HEIGHT +
+                ", WIDTH=" + WIDTH +
+                ", x=" + x +
+                ", y=" + y +
+                ", xSpeed=" + xSpeed +
+                ", ySpeed=" + ySpeed +
+                '}';
     }
 }
